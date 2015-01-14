@@ -100,3 +100,6 @@ include vendor/banana/config/packages.mk
 
 # Props
 include vendor/banana/config/props.mk
+
+# Sounds
+include vendor/banana/config/sounds.mk
