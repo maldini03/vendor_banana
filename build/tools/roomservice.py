@@ -40,7 +40,6 @@ except ImportError:
 from xml.etree import ElementTree
 
 product = sys.argv[1]
-default_rem = "banana"
 
 if len(sys.argv) > 2:
     depsonly = sys.argv[2]
@@ -73,7 +72,7 @@ def add_auth(githubreq):
         githubreq.add_header("Authorization","Basic %s" % githubauth)
 
 if not depsonly:
-    githubreq = urllib.request.Request("https://api.github.com/search/repositories?q=%s+user:BananaDroid+in:name+fork:true" % device)
+    githubreq = urllib.request.Request("https://api.github.com/search/repositories?q=%s+user:bananadroid+in:name+fork:true" % device)
     add_auth(githubreq)
     try:
         result = json.loads(urllib.request.urlopen(githubreq).read().decode())
@@ -125,14 +124,10 @@ def get_manifest_path():
         return ".repo/manifests/{}".format(m.find("include").get("name"))
 
 def get_default_revision():
-    lm = ElementTree.parse(".repo/manifests/banana.xml")
-
-    for d in lm.findall("remote"):
-        if d.get("name") == "banana":
-            r = d.get('revision')
-            return r.replace('refs/heads/', '').replace('refs/tags/', '')
-
-    return None
+    m = ElementTree.parse(get_manifest_path())
+    d = m.findall('default')[0]
+    r = d.get('revision')
+    return r.replace('refs/heads/', '').replace('refs/tags/', '')
 
 def get_from_manifest(devicename):
     try:
@@ -169,17 +164,7 @@ def is_in_manifest(projectpath):
         if localpath.get("path") == projectpath:
             return True
 
-    # ... and don't forget the BananaDroid additions
-    try:
-        lm = ElementTree.parse(".repo/manifests/lineage.xml")
-        lm = lm.getroot()
-    except:
-        lm = ElementTree.Element("manifest")
-
-    for localpath in lm.findall("project"):
-        if localpath.get("path") == projectpath:
-            return True
-
+    # ... and don't forget the banana snippet
     try:
         lm = ElementTree.parse(".repo/manifests/banana.xml")
         lm = lm.getroot()
@@ -200,27 +185,24 @@ def add_to_manifest(repositories, fallback_branch = None):
         lm = ElementTree.Element("manifest")
 
     for repository in repositories:
-        repo_remote = default_rem
-        if 'remote' in repository:
-            repo_remote = repository['remote']
         repo_name = repository['repository']
         repo_target = repository['target_path']
         print('Checking if %s is fetched from %s' % (repo_target, repo_name))
         if is_in_manifest(repo_target):
-            print('%s already fetched to %s' % (repo_name, repo_target))
+            print('bananadroid/%s already fetched to %s' % (repo_name, repo_target))
             continue
 
-        print('Adding dependency: %s -> %s' % (repo_name, repo_target))
+        print('Adding dependency: bananadroid/%s -> %s' % (repo_name, repo_target))
         project = ElementTree.Element("project", attrib = { "path": repo_target,
-            "remote": repo_remote, "name": "%s" % repo_name })
+            "remote": "github", "name": "bananadroid/%s" % repo_name })
 
-        if 'revision' in repository:
-            project.set('revision',repository['revision'])
+        if 'branch' in repository:
+            project.set('revision',repository['branch'])
         elif fallback_branch:
-            print("Using fallback revision %s for %s" % (fallback_branch, repo_name))
+            print("Using fallback branch %s for %s" % (fallback_branch, repo_name))
             project.set('revision', fallback_branch)
         else:
-            print("Using default revision for %s" % repo_name)
+            print("Using default branch for %s" % repo_name)
 
         lm.append(project)
 
@@ -232,7 +214,7 @@ def add_to_manifest(repositories, fallback_branch = None):
     f.write(raw_xml)
     f.close()
 
-def fetch_dependencies(repo_path, fallback_branch=None, first_dependency=False):
+def fetch_dependencies(repo_path, fallback_branch = None, first_dependency=False):
     print('Looking for dependencies in %s' % repo_path)
     dependencies_path = repo_path + '/banana.dependencies'
     syncable_repos = []
@@ -285,8 +267,7 @@ else:
     for repository in repositories:
         repo_name = repository['name']
         if re.match(r"^android_device_[^_]*_" + device + "$", repo_name):
-            repo_full_name = repository['full_name']
-            print("Found repository: %s" % repo_full_name)
+            print("Found repository: %s" % repository['name'])
             
             manufacturer = repo_name.replace("android_device_", "").replace("_" + device, "")
             
@@ -304,7 +285,7 @@ else:
                 result.extend (json.loads(urllib.request.urlopen(githubreq).read().decode()))
             
             repo_path = "device/%s/%s" % (manufacturer, device)
-            adding = {'repository':repo_full_name,'target_path':repo_path}
+            adding = {'repository':repo_name,'target_path':repo_path}
             
             fallback_branch = None
             if not has_branch(result, default_revision):
