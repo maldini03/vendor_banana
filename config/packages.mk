@@ -3,7 +3,8 @@ PRODUCT_PACKAGES += \
     Recorder \
     NoCutoutOverlay \
     AvoidAppsInCutoutOverlay \
-    SettingsIntelligenceGoogle
+    SettingsIntelligenceGoogle \
+    RepainterServicePriv
 
 ifneq ($(WITH_GAPPS),true)
 PRODUCT_PACKAGES += \
