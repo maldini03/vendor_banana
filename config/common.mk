@@ -35,7 +35,7 @@ PRODUCT_COPY_FILES += \
 
 # init file
 PRODUCT_COPY_FILES += \
-    vendor/banana/prebuilt/common/etc/init/init.banana-system.rc:$(TARGET_COPY_OUT_PRODUCT)/etc/init/init.banana-system.rc \
+    vendor/arrow/prebuilt/common/etc/init/init.banana-system_ext.rc:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/init/init.banana-system_ext.rc \
     vendor/banana/prebuilt/common/etc/init/init.banana-updater.rc:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/init/init.banana-updater.rc \
     vendor/banana/prebuilt/common/etc/init/init.openssh.rc:$(TARGET_COPY_OUT_PRODUCT)/etc/init/init.openssh.rc
 
