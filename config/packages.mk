@@ -2,7 +2,8 @@
 PRODUCT_PACKAGES += \
     Recorder \
     NoCutoutOverlay \
-    AvoidAppsInCutoutOverlay
+    AvoidAppsInCutoutOverlay \
+    SettingsIntelligenceGoogle
 
 ifneq ($(WITH_GAPPS),true)
 PRODUCT_PACKAGES += \
