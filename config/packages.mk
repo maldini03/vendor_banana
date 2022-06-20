@@ -1,87 +1,102 @@
-# Additional packages
+# Copyright (C) 2021-2022 BananaDroid
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-# Include explicitly to work around GMS issues
+
+# Required packages
 PRODUCT_PACKAGES += \
-    libprotobuf-cpp-full \
-    librsjni
-
-# Telephony
-PRODUCT_PACKAGES += \
-    ims-ext-common \
-    ims_ext_common.xml \
-    qti-telephony-hidl-wrapper \
-    qti_telephony_hidl_wrapper.xml \
-    qti-telephony-utils \
-    qti_telephony_utils.xml \
-    telephony-ext
-
-PRODUCT_BOOT_JARS += \
-    telephony-ext
-
-# CellBroadcastReceiver
-PRODUCT_PACKAGES += \
-CellBroadcastReceiver
-
-# Exchange support
-PRODUCT_PACKAGES += \
-    Exchange2
-
-# Additional apps
-PRODUCT_PACKAGES += \
-    SearchLauncherQuickStep \
-    CustomDoze \
+    BluetoothExt \
     ExactCalculator \
-    GamingMode \
-    OmniJaws \
-    SimpleDeviceConfig \
-    SimpleGallery \
-    Snap \
-    SoftAPManager \
-    StitchImage \
-    StitchImageService
-
-ifneq ($(GAPPS_VERSION),true)
-PRODUCT_PACKAGES += \
-    Etar \
-    ViaBrowser
-endif
-
-# Extra Tools
-PRODUCT_PACKAGES += \
-    7z \
-    curl \
-    getcap \
-    htop \
-    lib7z \
-    libsepol \
-    nano \
-    pigz \
-    setcap \
-    unrar \
-    zip
-
-# FS tools
-PRODUCT_PACKAGES += \
-    fsck.ntfs \
-    mount.ntfs \
-    mke2fs \
-    mkfs.ntfs
-
-# ThemePicker
-PRODUCT_PACKAGES += \
-    ThemePicker
-
-PRODUCT_PACKAGES += \
-    NavigationBarMode2ButtonOverlay
+    LatinIME \
+    Launcher3QuickStep \
+    messaging \
+    Stk \
+    stats \
+    ThemePicker \
+    BananaThemesStub
 
 # SystemUI plugins
 PRODUCT_PACKAGES += \
     QuickAccessWallet
 
-# Flipendo
+# Config
 PRODUCT_PACKAGES += \
-    Flipendo
+    SimpleDeviceConfig
 
-# Fonts
+# Navbar
 PRODUCT_PACKAGES += \
-    Custom-Fonts
+    NavigationBarNoHintOverlay
+
+# Extra tools
+PRODUCT_PACKAGES += \
+    7z \
+    bash \
+    curl \
+    getcap \
+    htop \
+    lib7z \
+    nano \
+    pigz \
+    powertop \
+    setcap \
+    unrar \
+    unzip \
+    vim \
+    zip
+
+PRODUCT_ARTIFACT_PATH_REQUIREMENT_ALLOWED_LIST += \
+    system/bin/curl \
+    system/bin/getcap \
+    system/bin/setcap
+
+# Exchange support
+PRODUCT_PACKAGES += \
+    Exchange2
+
+# Filesystems tools
+PRODUCT_PACKAGES += \
+    fsck.ntfs \
+    mke2fs \
+    mkfs.ntfs \
+    mount.ntfs
+
+# Openssh
+PRODUCT_PACKAGES += \
+    scp \
+    sftp \
+    ssh \
+    sshd \
+    sshd_config \
+    ssh-keygen \
+    start-ssh
+
+# rsync
+PRODUCT_PACKAGES += \
+    rsync
+
+# These packages are excluded from user builds
+PRODUCT_PACKAGES_DEBUG += \
+    procmem
+
+ifneq ($(TARGET_BUILD_VARIANT),user)
+PRODUCT_ARTIFACT_PATH_REQUIREMENT_ALLOWED_LIST += \
+    system/bin/procmem
+endif
+
+# Charger images
+PRODUCT_PACKAGES += \
+    charger_res_images
+
+# World APN list
+PRODUCT_PACKAGES += \
+    apns-conf.xml

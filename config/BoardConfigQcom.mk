@@ -20,7 +20,7 @@ UM_5_4_FAMILY := $(LAHAINA)
 UM_PLATFORMS := $(UM_3_18_FAMILY) $(UM_4_4_FAMILY) $(UM_4_9_FAMILY) $(UM_4_14_FAMILY) $(UM_4_19_FAMILY) $(UM_5_4_FAMILY)
 QSSI_SUPPORTED_PLATFORMS := $(UM_4_9_FAMILY) $(UM_4_14_FAMILY) $(UM_4_19_FAMILY) $(UM_5_4_FAMILY)
 
-ifeq ($(TARGET_USES_UM_4_19),true)
+ifneq (, $(filter true, $(TARGET_USES_UM_4_19) $(TARGET_USES_UM_4_9)))
     QSSI_SUPPORTED_PLATFORMS += $(TARGET_BOARD_PLATFORM)
 endif
 
@@ -82,20 +82,13 @@ ifneq ($(filter $(UM_5_4_FAMILY),$(TARGET_BOARD_PLATFORM)),)
     SOONG_CONFIG_qtidisplay_gralloc4 := true
 endif
 
+# Mark GRALLOC_USAGE_PRIVATE_WFD as valid gralloc bits
 TARGET_ADDITIONAL_GRALLOC_10_USAGE_BITS ?= 0
-
-# Mark GRALLOC_USAGE_HW_2D as valid gralloc bit on legacy platforms that support it
-ifneq ($(filter msm8960 msm8952 $(B_FAMILY) $(B64_FAMILY) $(BR_FAMILY),$(TARGET_BOARD_PLATFORM)),)
-    TARGET_ADDITIONAL_GRALLOC_10_USAGE_BITS += | (1 << 10)
-endif
-
-# Mark GRALLOC_USAGE_EXTERNAL_DISP as valid gralloc bit
+TARGET_ADDITIONAL_GRALLOC_10_USAGE_BITS += | (1 << 10)
 TARGET_ADDITIONAL_GRALLOC_10_USAGE_BITS += | (1 << 13)
-
-# Mark GRALLOC_USAGE_PRIVATE_WFD as valid gralloc bit
 TARGET_ADDITIONAL_GRALLOC_10_USAGE_BITS += | (1 << 21)
 
-# Mark GRALLOC_USAGE_PRIVATE_HEIF_VIDEO as valid gralloc bit on UM platforms that support it
+# Mark GRALLOC_USAGE_PRIVATE_HEIF_VIDEO as valid gralloc bits on UM platforms that support it
 ifneq ($(filter $(UM_4_9_FAMILY) $(UM_4_14_FAMILY) $(UM_4_19_FAMILY) $(UM_5_4_FAMILY),$(TARGET_BOARD_PLATFORM)),)
     TARGET_ADDITIONAL_GRALLOC_10_USAGE_BITS += | (1 << 27)
 endif
@@ -144,19 +137,16 @@ endif
 QCOM_SOONG_NAMESPACE ?= hardware/qcom-caf/$(QCOM_HARDWARE_VARIANT)
 PRODUCT_SOONG_NAMESPACES += $(QCOM_SOONG_NAMESPACE)
 
-# Add display-commonsys-intf to PRODUCT_SOONG_NAMESPACES for QSSI supported platforms
+# Add display-commonsys and display-commonsys-intf to PRODUCT_SOONG_NAMESPACES for QSSI supported platforms
 ifneq ($(filter $(QSSI_SUPPORTED_PLATFORMS),$(TARGET_BOARD_PLATFORM)),)
-    PRODUCT_SOONG_NAMESPACES += vendor/qcom/opensource/commonsys-intf/display
+    PRODUCT_SOONG_NAMESPACES += \
+        vendor/qcom/opensource/commonsys/display \
+	vendor/qcom/opensource/commonsys-intf/display
 endif
 
 # Add data-ipa-cfg-mgr to PRODUCT_SOONG_NAMESPACES if needed
 ifneq ($(USE_DEVICE_SPECIFIC_DATA_IPA_CFG_MGR),true)
     PRODUCT_SOONG_NAMESPACES += vendor/qcom/opensource/data-ipa-cfg-mgr
-endif
-
-# Add dataservices to PRODUCT_SOONG_NAMESPACES if needed
-ifneq ($(USE_DEVICE_SPECIFIC_DATASERVICES),true)
-    PRODUCT_SOONG_NAMESPACES += vendor/qcom/opensource/dataservices
 endif
 
 ifeq ($(TARGET_USE_QTI_BT_STACK),true)

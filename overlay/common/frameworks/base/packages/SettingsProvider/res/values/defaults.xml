@@ -21,10 +21,5 @@
 
     <string name="def_backup_transport">com.google.android.gms/.backup.BackupTransportService</string>
 
-    <!-- Disable bluetooth by default -->
-    <bool name="def_bluetooth_on">true</bool>
-
-    <!-- Enable automatic brightness by default -->
-    <bool name="def_screen_brightness_automatic_mode">true</bool>
-
+    <bool name="def_one_handed_mode_enabled">true</bool>
 </resources>
