@@ -4,7 +4,8 @@ PRODUCT_PACKAGES += \
     NoCutoutOverlay \
     AvoidAppsInCutoutOverlay \
     SettingsIntelligenceGoogle \
-    RepainterServicePriv
+    RepainterServicePriv \
+    GameSpace
 
 ifneq ($(WITH_GAPPS),true)
 PRODUCT_PACKAGES += \
