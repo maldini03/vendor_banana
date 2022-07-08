@@ -1,9 +1,14 @@
 # BananaDroid packages
 PRODUCT_PACKAGES += \
     Recorder \
-    ThemePicker \
     NoCutoutOverlay \
     AvoidAppsInCutoutOverlay
+
+ifneq ($(WITH_GAPPS),true)
+PRODUCT_PACKAGES += \
+    ThemePicker \
+    Launcher3QuickStep
+endif
 
 # Config
 PRODUCT_PACKAGES += \
