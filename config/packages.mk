@@ -2,11 +2,16 @@
 PRODUCT_PACKAGES += \
     GameSpace \
     Recorder \
-    ThemePicker \
     NoCutoutOverlay \
     AvoidAppsInCutoutOverlay \
     SettingsIntelligenceGoogle \
     RepainterServicePriv
+
+ifneq ($(WITH_GAPPS),true)
+PRODUCT_PACKAGES += \
+    ThemePicker \
+    Launcher3QuickStep
+endif
 
 # Config
 PRODUCT_PACKAGES += \
