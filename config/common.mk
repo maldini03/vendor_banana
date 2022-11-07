@@ -98,6 +98,10 @@ PRODUCT_RESTRICT_VENDOR_FILES := false
 # Dedupe VNDK libraries with identical core variants
 TARGET_VNDK_USE_CORE_VARIANT := true
 
+# Use a generic profile based boot image by default
+PRODUCT_USE_PROFILE_FOR_BOOT_IMAGE := true
+PRODUCT_DEX_PREOPT_BOOT_IMAGE_PROFILE_LOCATION := art/build/boot/boot-image-profile.txt
+
 # ART
 # Optimize everything for preopt
 PRODUCT_DEX_PREOPT_DEFAULT_COMPILER_FILTER := everything
