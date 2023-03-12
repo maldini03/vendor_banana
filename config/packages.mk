@@ -19,6 +19,11 @@ PRODUCT_PACKAGES += \
     Launcher3QuickStep \
     ViaBrowser
 
+ifeq ($(BANANA_BUILD_TYPE), OFFICIAL)
+PRODUCT_PACKAGES += \
+    Updater
+endif
+
 ifneq ($(TARGET_EXCLUDE_MATLOG),true)
 PRODUCT_PACKAGES += \
     MatLog
