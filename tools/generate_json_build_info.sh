@@ -11,7 +11,18 @@ then
     datetime=$(grep ro\.build\.date\.utc ./out/target/product/$DEVICE/system/build.prop | cut -d= -f2);
     id=$(sha256sum $file_path | awk '{ print $1 }');
     maintainer_name=$(grep ro\.banana\.maintainer\= ./out/target/product/$DEVICE/system/build.prop | cut -d= -f2);
-    echo -e "{\n   \"datetime\": $datetime,\n   \"filehash\": \"$md5\",\n   \"filename\": \"$file_name\",\n   \"id\": \"$id\",\n   \"size\": $file_size,\n   \"maintainer\": $maintainer_name,\n}" > $file_path.json
+    echo '{
+	"response": [
+		{
+			"datetime": "'$datetime'",
+			"filehash": "'$md5'",
+			"filename": "'$file_name'",
+			"id": "'$id'",
+			"size": "'$file_size'",
+			"maintainer": '$maintainer_name',
+		}
+	]
+    }' >> $file_path.json
     rm -rf "./$DEVICE.json"
     mv "${file_path}.json" "./$DEVICE.json"
   fi
